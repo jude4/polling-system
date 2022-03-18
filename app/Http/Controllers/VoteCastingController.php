@@ -15,5 +15,6 @@ class VoteCastingController extends Controller
     public function show()
     {
         return Inertia::render('VoteCasting/Show');
+        
     }
 }
