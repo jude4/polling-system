@@ -2,8 +2,6 @@
 import { Head, Link } from "@inertiajs/inertia-vue3";
 
 defineProps({});
-
-
 </script>
 
 <template>
@@ -42,20 +40,21 @@ defineProps({});
             </template>
         </div> -->
 
+        
         <div class="md:w-1/2 my-auto mx-auto sm:px-6 lg:px-8 shadow-2xl p-12">
             <p class="text-center text-5xl font-bold">Polling System</p>
             <p class="text-center font-semibold text-xl my-5 text-gray-600">
                 Sign up to cast your vote
             </p>
 
-            <div v-if=" $page.props.auth.user">
+            <div v-if="$page.props.auth.user">
                 <p class="mt-10 text-center text-2xl md:text-3xl font-semibold">
                     You're currently logged in!
                 </p>
                 <p class="text-center md:text-xl text-lg mt-2">
                     Cast your vote
                     <Link
-                        :href="route('vote-casting')"
+                        :href="route('vote.casting')"
                         class="text-red-500 underline"
                         >Here</Link
                     >

@@ -1,14 +1,20 @@
 <template>
     <Head title="Casting Of Vote" />
-    <div class="header">
-        <Link
-            class="my-4 flex justify-end mr-8 font-semibold text-red-600 hover:text-red-500"
-            :href="route('logout')"
-            method="post"
-        >
-            Logout
-        </Link>
+    <div class="header flex justify-between">
+        <div class="my-auto ml-4">
+            <p><spann class="font-semibold">Logged in as</spann> {{ $page.props.auth.user.name }}</p>
+        </div>
+        <div>
+            <Link
+                class="my-4 flex justify-end mr-8 font-semibold text-red-600 hover:text-red-500"
+                :href="route('logout')"
+                method="post"
+            >
+                Logout
+            </Link>
+        </div>
     </div>
+
     <div class="head">
         <p class="text-center text-5xl mt-12">Polling System</p>
         <p class="text-center text-xl mt-2">
@@ -71,7 +77,12 @@
                                     <tbody
                                         class="text-sm divide-y divide-gray-100"
                                     >
-                                        <tr v-for="n in 6" :key="n">
+                                        <tr
+                                            v-for="candidate in candidates"
+                                            :key="
+                                                candidate.ConvertInvalidComponents
+                                            "
+                                        >
                                             <td class="p-2 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     <!-- <div
@@ -88,7 +99,7 @@
                                                     <div
                                                         class="font-medium text-gray-800"
                                                     >
-                                                        Alex Shatov
+                                                        {{ candidate.name }}
                                                     </div>
                                                 </div>
                                             </td>
@@ -99,14 +110,20 @@
                                                 <div
                                                     class="text-left font-medium text-green-500"
                                                 >
-                                                    vote
+                                                   
+                                                    <ul>
+                                                        <li v-for="vote in candidate.votes" :key="vote.id">
+                                                           <span v-if="vote.voter_id == $page.props.auth.user.id">has voted</span>
+                                                           <span v-else>vote</span>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </td>
                                             <td class="p-2 whitespace-nowrap">
                                                 <div
                                                     class="text-lg text-center"
                                                 >
-                                                    40
+                                                    {{ candidate.total_votes }}
                                                 </div>
                                             </td>
 
@@ -114,15 +131,21 @@
                                                 <div
                                                     class="text-lg text-center"
                                                 >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 320 512"
-                                                        class="w-5 h-5"
+                                                    <Link
+                                                        :href="
+                                                            route('vote.show', candidate)
+                                                        "
                                                     >
-                                                        <path
-                                                            d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z"
-                                                        />
-                                                    </svg>
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 320 512"
+                                                            class="w-5 h-5"
+                                                        >
+                                                            <path
+                                                                d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z"
+                                                            />
+                                                        </svg>
+                                                    </Link>
                                                 </div>
                                             </td>
                                         </tr>
@@ -149,6 +172,10 @@
 <script setup>
 import BreezeAuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
+
+defineProps({
+    candidates: Array,
+});
 </script>
 
 <style></style>
